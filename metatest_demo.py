@@ -17,7 +17,7 @@ np.random.seed(0)
 
 def seed_torch(seed=0):
     np.random.seed(seed)
-    os.environ['PYTHONHASHSEED'] = str(seed)  # 为了禁止hash随机化，使得实验可复现
+    os.environ['PYTHONHASHSEED'] = str(seed)  
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
@@ -161,7 +161,7 @@ def sigmoid_net(X):
 class MultiLinearRegression(nn.Module):
     def __init__(self):
         super(MultiLinearRegression, self).__init__()
-        self.linear = nn.Linear(featureDim, 1, bias=False)  # 因为3个变量映射1个输出
+        self.linear = nn.Linear(featureDim, 1, bias=False)  
 
     def forward(self, x):
         out = self.linear(x)
@@ -171,7 +171,7 @@ class MultiLinearRegression(nn.Module):
 class MultiLinearRegression1(nn.Module):
     def __init__(self, input, output):
         super(MultiLinearRegression1, self).__init__()
-        self.linear = nn.Linear(input, output, bias=False)  # 因为3个变量映射1个输出
+        self.linear = nn.Linear(input, output, bias=False) 
 
     def forward(self, x):
         out = self.linear(x)
@@ -273,7 +273,6 @@ class Accumulator:  # @save
 
 
 def evaluate_accuracy(net, data_iter):  # @save
-    """计算在指定数据集上模型的精度"""
     if isinstance(net, torch.nn.Module):
         net.eval()
     metric = Accumulator(2)
@@ -338,7 +337,7 @@ def meta_model_update(meta_model_1, meta_model_2,
                       epoch):
     outputs = meta_model_1(x_1).squeeze(-1)
     cost = nn.BCELoss(reduction='none')
-    cost = cost(outputs, y_1)  # 损失计算
+    cost = cost(outputs, y_1)  
     cost_v = torch.reshape(cost, (len(cost), 1))
     v_lambda = vnet_1(cost_v.data)
     w1 = abs((v_lambda - v_lambda.max()) / (v_lambda.max() - v_lambda.min()))
@@ -364,7 +363,7 @@ def meta_model_update2(meta_model_1, meta_model_2, meta_model_3,
     outputs = meta_model_1(x_1).squeeze(-1)
     outputs = torch.where(torch.isnan(outputs), torch.zeros_like(outputs), outputs)
     cost = nn.BCELoss(reduction='none')
-    cost = cost(outputs, y_1)  # 损失计算
+    cost = cost(outputs, y_1)  
     cost_v = torch.reshape(cost, (len(cost), 1))
     v_lambda = vnet_1(cost_v.data)
     w1 = abs((v_lambda - v_lambda.max()) / (v_lambda.max() - v_lambda.min()))
