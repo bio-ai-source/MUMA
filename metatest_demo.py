@@ -17,7 +17,7 @@ np.random.seed(0)
 
 def seed_torch(seed=0):
     np.random.seed(seed)
-    os.environ['PYTHONHASHSEED'] = str(seed)  
+    os.environ['PYTHONHASHSEED'] = str(seed)
     np.random.seed(seed)
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
@@ -161,7 +161,7 @@ def sigmoid_net(X):
 class MultiLinearRegression(nn.Module):
     def __init__(self):
         super(MultiLinearRegression, self).__init__()
-        self.linear = nn.Linear(featureDim, 1, bias=False)  
+        self.linear = nn.Linear(featureDim, 1, bias=False)
 
     def forward(self, x):
         out = self.linear(x)
@@ -171,7 +171,7 @@ class MultiLinearRegression(nn.Module):
 class MultiLinearRegression1(nn.Module):
     def __init__(self, input, output):
         super(MultiLinearRegression1, self).__init__()
-        self.linear = nn.Linear(input, output, bias=False) 
+        self.linear = nn.Linear(input, output, bias=False)
 
     def forward(self, x):
         out = self.linear(x)
@@ -337,7 +337,7 @@ def meta_model_update(meta_model_1, meta_model_2,
                       epoch):
     outputs = meta_model_1(x_1).squeeze(-1)
     cost = nn.BCELoss(reduction='none')
-    cost = cost(outputs, y_1)  
+    cost = cost(outputs, y_1)
     cost_v = torch.reshape(cost, (len(cost), 1))
     v_lambda = vnet_1(cost_v.data)
     w1 = abs((v_lambda - v_lambda.max()) / (v_lambda.max() - v_lambda.min()))
@@ -363,7 +363,7 @@ def meta_model_update2(meta_model_1, meta_model_2, meta_model_3,
     outputs = meta_model_1(x_1).squeeze(-1)
     outputs = torch.where(torch.isnan(outputs), torch.zeros_like(outputs), outputs)
     cost = nn.BCELoss(reduction='none')
-    cost = cost(outputs, y_1)  
+    cost = cost(outputs, y_1)
     cost_v = torch.reshape(cost, (len(cost), 1))
     v_lambda = vnet_1(cost_v.data)
     w1 = abs((v_lambda - v_lambda.max()) / (v_lambda.max() - v_lambda.min()))
@@ -549,24 +549,10 @@ def calculate_weight_loss2(model, vnet, x, y):
         w_new = abs((w_new - w_new.max()) / (w_new.max() - w_new.min()))
 
     return (cost_v * w_new), w_new
-lmbda_list = []
-lmbda2_list = []
-acc_list = []
+
 lmbda = 0.05
 lmbda2 = 0.05
 nums = 1
-Sensitivity_M1 = 0
-Specificity_M1 = 0
-Sensitivity_M2 = 0
-Specificity_M2 = 0
-Sensitivity_M3 = 0
-Specificity_M3 = 0
-Sensitivity_all = 0
-Specificity_all = 0
-ACC_M = 0
-ACC_M_voting = 0
-ACC_M_handmake = 0
-ACC_M_voting_handmake = 0
 for num in range(nums):
     featureDim = 1000
     sampleNum = 200
